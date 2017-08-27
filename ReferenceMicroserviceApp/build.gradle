@@ -1,0 +1,54 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.6.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+configurations {
+	//exclude tomcat as we will embed with tomcat
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	
+	// health Check, Metrics, Endpoints to monitor the application
+	compile("org.springframework.boot:spring-boot-starter-actuator")
+	
+	// Swagger support (UI and APIs) - http://springfox.github.io/springfox/docs/current/
+	compile("io.springfox:springfox-swagger2:2.7.0")
+	compile("io.springfox:springfox-swagger-ui:2.7.0")
+	
+	//Embed jetty instead of the default, tomcat
+    compile("org.springframework.boot:spring-boot-starter-jetty:1.5.6.RELEASE")
+    
+    // Simply data classes
+    compileOnly("org.projectlombok:lombok:1.16.16")
+    
+    // Circuit breaker (hystrix)
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.2.6.RELEASE'
+    
+    // Spring Security
+    //compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.5.2.RELEASE'
+    
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
